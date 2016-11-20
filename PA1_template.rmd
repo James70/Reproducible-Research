@@ -1,0 +1,75 @@
+---
+title: "Personal Movement Analysis"
+author: "Jim Perkins"
+date: "November 13, 2016"
+output: html_document
+---
+
+```{r 1-setup_report, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(dplyr)
+
+#/ read the dataset
+dataset<- read_csv("./activity.csv")
+steps_by_day <- count(dataset, date, wt = steps)
+
+
+```
+#### Part 1 
+
+> *For this part of the analysis, we ignored missing values (i.e. we stripped out any "NA" values*  
+> *from the dataset before calculating the mean, median and the frequency plot.*
+
+```{r 2-ignoreNA, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+steps <- as.data.frame(  steps_by_day[,2] )  
+non.zero.steps <- steps$n[steps$n != 0]      #/remove all NA's from the data set 
+
+x <- mean(non.zero.steps)
+f.mean_steps_perday <- format(round(x,1),big.mark = ",")
+
+y <- as.numeric(median(non.zero.steps))
+f.median_steps_perday <- format(y, big.mark = ",")
+
+```
+
+
+* Over the 2 month measurement period...  
+ + AVERAGE steps per day was: **`r f.mean_steps_perday`**  
+ + MEDIAN  steps per day was: **`r f.median_steps_perday`** 
+
+
+
+Here is a frequency plot (i.e. histogram) of the total steps taken each day
+
+```{r 3-print_Steps_Table, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# xt <- xtable(summary(steps_by_day))
+# print(xt, type="html" )
+
+#/Histogram of steps
+myTitle <- "Frequency plot of daily steps"
+xlabel <- "Daily steps (in interval of 2,000)"
+hist(non.zero.steps, breaks = 10, col = "light blue", xlab = xlabel, main = myTitle)
+
+```
+
+> *Meaning: The most frequently occurring steps in a day are between 10,000 to 12,000*  
+
+
+```{r 4-plot_aveSteps_perInterval, include=TRUE}
+
+
+
+
+```
+
+
+ 
+ 
+
+ 
