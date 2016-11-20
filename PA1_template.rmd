@@ -2,10 +2,12 @@
 title: "Personal Movement Analysis"
 author: "Jim Perkins"
 date: "November 13, 2016"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
-```{r 1-setup_report, include=FALSE}
+```{r 1-setup_report, include=TRUE}
 
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
@@ -22,7 +24,7 @@ steps_by_day <- count(dataset, date, wt = steps)
 > *For this part of the analysis, we ignored missing values (i.e. we stripped out any "NA" values*  
 > *from the dataset before calculating the mean, median and the frequency plot.*
 
-```{r 2-ignoreNA, include=FALSE}
+```{r 2-ignoreNA, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 
 steps <- as.data.frame(  steps_by_day[,2] )  
