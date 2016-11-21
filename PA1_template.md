@@ -3,46 +3,6 @@ Jim Perkins
 November 13, 2016  
 
 
-```r
-knitr::opts_chunk$set(echo = TRUE)
-library(readr)
-library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
-#/ read the dataset
-dataset<- read_csv("./activity.csv")
-```
-
-```
-## Parsed with column specification:
-## cols(
-##   steps = col_integer(),
-##   date = col_date(format = ""),
-##   interval = col_integer()
-## )
-```
-
-```r
-steps_by_day <- count(dataset, date, wt = steps)
-```
 #### Part 1 
 
 > *For this part of the analysis, we ignored missing values (i.e. we stripped out any "NA" values*  
@@ -63,9 +23,7 @@ f.median_steps_perday <- format(y, big.mark = ",")
 ```
 
 
-* Over the 2 month measurement period...  
- + AVERAGE steps per day was: **10,766.2**  
- + MEDIAN  steps per day was: **10,765** 
+Over the 2 month measurement period: AVERAGE steps per day was: **10,766.2** and the MEDIAN  steps per day was: **10,765** 
 
 
 
@@ -74,10 +32,6 @@ Here is a frequency plot (i.e. histogram) of the total steps taken each day
 
 ```r
 knitr::opts_chunk$set(echo = TRUE)
-
-# xt <- xtable(summary(steps_by_day))
-# print(xt, type="html" )
-
 #/Histogram of steps
 myTitle <- "Frequency plot of daily steps"
 xlabel <- "Daily steps (in interval of 2,000)"
@@ -90,6 +44,29 @@ hist(non.zero.steps, breaks = 10, col = "light blue", xlab = xlabel, main = myTi
 
 
 
+```r
+knitr::opts_chunk$set(echo = TRUE)
+
+x <- select(dataset, interval, date, steps) %>% filter(steps >0) 
+tmp <- arrange(x, interval)
+plotdata <- aggregate(x = tmp, by = list(tmp$interval), FUN = "mean")
+title <- "Time series of ave. steps by interval (across all intervals)"
+plot(plotdata$interval, plotdata$steps, type="l", main=title, col="dark green" ) 
+```
+
+![](PA1_template_files/figure-html/4-plot_aveSteps_perInterval-1.png)<!-- -->
+
+ Which interval and day has the highest average steps?
+
+```r
+knitr::opts_chunk$set(echo =TRUE)
+plotdata[which.max(plotdata$steps),]
+```
+
+```
+##    Group.1 interval       date    steps
+## 86     835      835 2012-10-27 352.4839
+```
 
 
  

@@ -25,32 +25,17 @@ f.median_steps_perday <- format(y, big.mark = ",")
 myTitle <- "Frequency plot of daily steps"
 xlabel <- "Daily steps (in groups of 2,000)"
 hist(non.zero.steps, breaks = 10, col = "light blue", xlab = xlabel, main = myTitle)
-plot(steps.by.interval, col = "dark green")
 
+#// (code chunk 4 - average steps per interval over entire 2 month period)
 
+x <- select(dataset, interval, date, steps) %>% filter(steps >0) 
+tmp <- arrange(x, interval)
+plotdata <- aggregate(x = tmp, by = list(tmp$interval), FUN = "mean")
+title <- "Time series of ave. steps by interval (across all intervals)"
+plot(plotdata$interval, plotdata$steps, type="l", main = title, col="dark green" ) 
 
-#// (code chunk 4 - plot ave steps by interval over all days)
+#// (code chunk 5)
+#/ which.max(tmp$steps)
+plotdata[which.max(plotdata$steps),]
 
-#/Average steps for each interval
-#/test average steps per day
- steps.test <- read.csv("./test-steps.csv")
- tmp1 <- arrange(steps.test, interval)
- tmp2 <- group_by(tmp1, interval)
- result <- summarize(tmp2, m=mean(steps) )
  
- #now with real dataset
- tmp1 <- arrange(dataset, interval)
- tmp2 <- group_by(tmp1, interval)
- result <- summarize(tmp2, m=mean(steps) )
- 
- 
- #alternative
-test1 <-  steps.test %>%  group_by((interval)) %>% summarise(ave=mean(steps))
- 
-#now with the real data...
- test2 <- dataset %>%  group_by((interval)) %>% summarise(ave=mean(steps))  #which includes NAs
- 
- 
-#tmp <- arrange(dataset, interval)
-#tmp <- select(tmp, c(3,1))
-#steps.TallyByInterval <- count(tmp, interval, wt=steps)

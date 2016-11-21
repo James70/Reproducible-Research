@@ -4,11 +4,11 @@ author: "Jim Perkins"
 date: "November 13, 2016"
 output: 
   html_document: 
+    fig_caption: yes
     keep_md: yes
 ---
 
-```{r 1-setup_report, include=TRUE}
-
+```{r 1-setup_report, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
@@ -16,8 +16,6 @@ library(dplyr)
 #/ read the dataset
 dataset<- read_csv("./activity.csv")
 steps_by_day <- count(dataset, date, wt = steps)
-
-
 ```
 #### Part 1 
 
@@ -39,9 +37,7 @@ f.median_steps_perday <- format(y, big.mark = ",")
 ```
 
 
-* Over the 2 month measurement period...  
- + AVERAGE steps per day was: **`r f.mean_steps_perday`**  
- + MEDIAN  steps per day was: **`r f.median_steps_perday`** 
+Over the 2 month measurement period: AVERAGE steps per day was: **`r f.mean_steps_perday`** and the MEDIAN  steps per day was: **`r f.median_steps_perday`** 
 
 
 
@@ -49,13 +45,9 @@ Here is a frequency plot (i.e. histogram) of the total steps taken each day
 
 ```{r 3-print_Steps_Table, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
-
-# xt <- xtable(summary(steps_by_day))
-# print(xt, type="html" )
-
 #/Histogram of steps
 myTitle <- "Frequency plot of daily steps"
-xlabel <- "Daily steps (in interval of 2,000)"
+xlabel <- "Daily steps (in intervalS of 2,000)"
 hist(non.zero.steps, breaks = 10, col = "light blue", xlab = xlabel, main = myTitle)
 
 ```
@@ -64,9 +56,20 @@ hist(non.zero.steps, breaks = 10, col = "light blue", xlab = xlabel, main = myTi
 
 
 ```{r 4-plot_aveSteps_perInterval, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
 
+x <- select(dataset, interval, date, steps) %>% filter(steps >0) 
+tmp <- arrange(x, interval)
+plotdata <- aggregate(x = tmp, by = list(tmp$interval), FUN = "mean")
+title <- "Time series of ave. steps by interval (across all intervals)"
+plot(plotdata$interval, plotdata$steps, type="l", main=title, col="dark green" ) 
 
+```
 
+ Which interval and day has the highest average steps?
+```{r 5-highest.Interval, include=TRUE}
+knitr::opts_chunk$set(echo =TRUE)
+plotdata[which.max(plotdata$steps),]
 
 ```
 
